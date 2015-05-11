@@ -11,19 +11,22 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
-
+    
+     var myView : SCNView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
             
         let myView = SCNView(frame: self.view.frame)
         let myScene = SCNScene()
         myView.scene = myScene
-//        myView.autoenablesDefaultLighting = false
+//        myView.autoenablesDefaultLighting = true
 //        myView.showsStatistics = false
+        myView.allowsCameraControl = true
         
         self.view.addSubview(myView)
         
-        //create box
+        // Create a box and put it at the center of the scene
         let myBox = SCNBox(width: 15, height: 10, length: 12, chamferRadius: 0)
         let myBoxNode = SCNNode(geometry: myBox)
         myBoxNode.position = SCNVector3(x: 0, y: 0, z: 0)
@@ -62,6 +65,48 @@ class GameViewController: UIViewController {
         ambientLightNode.light!.type = SCNLightTypeAmbient
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
+        
+        let myCamera = SCNCamera()
+        myCamera.xFov = 40
+        myCamera.yFov = 40
+        let myCameraNode = SCNNode()
+        myCameraNode.camera = myCamera
+        myCameraNode.position = SCNVector3(x: -25, y: 20, z: 30)
+        myCameraNode.orientation = SCNQuaternion(x: -0.26, y: -0.32, z: 0, w: 0.91)
+        myScene.rootNode.addChildNode(myCameraNode)
+        
+//        let myOmniLight = SCNLight()
+//        let myOmniLightNode = SCNNode()
+//        myOmniLight.type = SCNLightTypeOmni
+//        myOmniLight.color = UIColor.yellowColor()
+//        myOmniLightNode.light = myOmniLight
+//        myOmniLightNode.position = SCNVector3(x: -30, y: 30, z: 60)
+//        myScene.rootNode.addChildNode(myOmniLightNode)
+
+//        let myAmbientLight = SCNLight()
+//        myAmbientLight.type = SCNLightTypeAmbient
+//        myAmbientLight.color = UIColor.yellowColor()
+//        let myAmbientLightNode = SCNNode()
+//        myAmbientLightNode.light = myAmbientLight
+//        myScene.rootNode.addChildNode(myAmbientLightNode)
+        
+//        let myDirectLight = SCNLight()
+//        myDirectLight.type = SCNLightTypeDirectional
+//        myDirectLight.color = UIColor.yellowColor()
+//        let myDirectLightNode = SCNNode()
+//        myDirectLightNode.light = myDirectLight
+//        myDirectLightNode.orientation = SCNQuaternion(x: 0, y: 0, z: 1, w: 0)
+//        myScene.rootNode.addChildNode(myDirectLightNode)
+        
+        let mySpotLight = SCNLight()
+        mySpotLight.type = SCNLightTypeSpot
+        mySpotLight.color = UIColor.yellowColor()
+        let mySpotLightNode = SCNNode()
+        mySpotLightNode.light = mySpotLight
+        mySpotLightNode.position = SCNVector3(x: 0, y: 0, z: 20)
+        mySpotLightNode.orientation = SCNQuaternion(x: 0, y: 0, z: 1, w: 0.5)
+        myScene.rootNode.addChildNode(mySpotLightNode)
+
         
         // retrieve the ship node
         let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
@@ -134,6 +179,13 @@ class GameViewController: UIViewController {
         return true
     }
     
+//    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+//       
+//        let quaternion = myView?.pointOfView.orientation
+//        let position = myView?.pointOfView.position
+//            println("Orientation: (\(quaternion?.x),\(quaternion?.y),\(quaternion?.z),\(quaternion?.w)) Position: (\(position?.x),\(position?.y),\(position?.z)")
+//        }
+
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
@@ -150,5 +202,8 @@ class GameViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
     }
+    
+    
+    
 
 }
