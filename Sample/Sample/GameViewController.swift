@@ -31,7 +31,7 @@ class GameViewController: UIViewController {
         let myBoxNode = SCNNode(geometry: myBox)
         myBoxNode.position = SCNVector3(x: 0, y: 0, z: 0)
         myBoxNode.rotation = SCNVector4(x: 1, y: 1, z: 0.5, w: 0.6)
-        myScene.rootNode.addChildNode(myBoxNode)
+        //myScene.rootNode.addChildNode(myBoxNode)
         
         let myLight = SCNLight()
         let myLightNode = SCNNode()
@@ -98,14 +98,88 @@ class GameViewController: UIViewController {
 //        myDirectLightNode.orientation = SCNQuaternion(x: 0, y: 0, z: 1, w: 0)
 //        myScene.rootNode.addChildNode(myDirectLightNode)
         
-        let mySpotLight = SCNLight()
-        mySpotLight.type = SCNLightTypeSpot
-        mySpotLight.color = UIColor.yellowColor()
-        let mySpotLightNode = SCNNode()
-        mySpotLightNode.light = mySpotLight
-        mySpotLightNode.position = SCNVector3(x: 0, y: 0, z: 20)
-        mySpotLightNode.orientation = SCNQuaternion(x: 0, y: 0, z: 1, w: 0.5)
-        myScene.rootNode.addChildNode(mySpotLightNode)
+//        let mySpotLight = SCNLight()
+//        mySpotLight.type = SCNLightTypeSpot
+//        mySpotLight.color = UIColor.yellowColor()
+//        let mySpotLightNode = SCNNode()
+//        mySpotLightNode.light = mySpotLight
+//        mySpotLightNode.position = SCNVector3(x: 0, y: 0, z: 20)
+//        mySpotLightNode.orientation = SCNQuaternion(x: 0, y: 0, z: 1, w: 0.5)
+//        myScene.rootNode.addChildNode(mySpotLightNode)
+
+        //===================================PARTE03=======================================
+        // Create a sphere
+        let mySphere = SCNSphere(radius: 10)
+        let mySphereNode = SCNNode(geometry: mySphere)
+        mySphereNode.position = SCNVector3(x: -15, y: 0, z: 0)
+        myScene.rootNode.addChildNode(mySphereNode)
+        
+        // Create a pyramid
+        let myPyramid = SCNPyramid(width: 20, height: 20, length: 20)
+        let myPyramidNode = SCNNode(geometry: myPyramid)
+        myPyramidNode.position = SCNVector3(x: 20, y: -10, z: 0)
+        myScene.rootNode.addChildNode(myPyramidNode)
+        
+        
+        // Create a camera
+        //        let myCamera = SCNCamera()
+        myCamera.xFov = 80
+        myCamera.yFov = 80
+        //        let myCameraNode = SCNNode()
+        myCameraNode.camera = myCamera
+        myCameraNode.position = SCNVector3(x: -25, y: 10, z: 30)
+        myCameraNode.orientation = SCNQuaternion(x: -0.26, y: -0.32, z: 0, w: 0.91)
+        myScene.rootNode.addChildNode(myCameraNode)
+        
+        
+        // Create a material with image
+        let myStar = SCNMaterial()
+        
+        // Use the absolute path to refer the texture image file
+        //myStar.diffuse.contents = UIImage(named: "star1.png")
+        
+        // Add Star material to myPyramid and mySphere
+        myPyramid.materials = [myStar]
+        mySphere.materials = [myStar]
+        
+        // Create a material with single color
+        let myBlue = SCNMaterial()
+        myBlue.diffuse.contents = UIColor.purpleColor()
+        
+        // Assign a list to geometries' materials property
+        myPyramid.materials = [myStar, myBlue]
+        mySphere.materials = [myStar, myBlue]
+        
+        myStar.reflective.contents = UIColor.purpleColor()
+        myBlue.reflective.contents = UIColor.whiteColor()
+        
+        // Create a floor (an infinite plain surface without round corner,
+        // usually for background.)
+        //
+        let myFloor = SCNFloor()
+        let myFloorNode = SCNNode(geometry: myFloor)
+        myFloorNode.position = SCNVector3(x: 0, y: -10, z: 0)
+        myScene.rootNode.addChildNode(myFloorNode)
+        
+        // Use reflectivity properties of SCNFloor
+        myFloor.reflectivity = 0.9
+        myFloor.reflectionResolutionScaleFactor = 1.0
+        myFloor.reflectionFalloffStart = 2.0
+        myFloor.reflectionFalloffEnd = 10.0
+        
+        myFloor.materials = [myStar, myBlue]
+        
+        // Create a 3D text
+        let myText = SCNText(string: "Mariana", extrusionDepth: 5)
+        myText.font = UIFont(name: "Optima", size: 30)
+        myText.materials = [myStar, myBlue]
+        let myTextNode = SCNNode(geometry: myText)
+        myTextNode.position = SCNVector3(x: -33, y: -10, z: 10)
+        myTextNode.orientation = SCNQuaternion(x: 0.1, y: 0, z: 0.5, w: 0)
+        myScene.rootNode.addChildNode(myTextNode)
+
+        
+        //====================================================================================
 
         
         // retrieve the ship node
